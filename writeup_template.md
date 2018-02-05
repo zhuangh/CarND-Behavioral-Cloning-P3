@@ -45,6 +45,10 @@ Using the Udacity provided simulator and my drive.py file, the car can be driven
 ```sh
 python drive.py model.h5
 ```
+Docker
+```sh
+docker run -it --rm -p 8888:8888 -v `pwd`:/src udacity/carnd-term1-starter-kit python drive.py model.h5
+```
 
 #### 3. Submission code is usable and readable
 
