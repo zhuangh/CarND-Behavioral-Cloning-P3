@@ -61,7 +61,18 @@ def telemetry(sid, data):
         imgString = data["image"]
         image = Image.open(BytesIO(base64.b64decode(imgString)))
         image_array = np.asarray(image)
-        steering_angle = float(model.predict(image_array[None, :, :, :], batch_size=1))
+        
+        ### Change image to fit the trained model
+        def crop_image(image, top=60, bottom=135):
+            return image[top:bottom]
+        def preprocess(image):
+            import cv2
+            return cv2.resize(crop_image(image),(224, 49), 
+                              interpolation=cv2.INTER_AREA)
+        resized_image = np.expand_dims(preprocess(image_array), axis=0)
+        steering_angle = float(model.predict(resized_image, batch_size=1))
+        ###
+        #steering_angle = float(model.predict(image_array[None, :, :, :], batch_size=1))
 
         throttle = controller.update(float(speed))
 
@@ -137,3 +148,5 @@ if __name__ == '__main__':
 
     # deploy as an eventlet WSGI server
     eventlet.wsgi.server(eventlet.listen(('', 4567)), app)
+
+

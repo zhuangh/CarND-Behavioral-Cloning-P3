@@ -43,11 +43,11 @@ My project includes the following files:
 #### 2. Submission includes functional code
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
 ```sh
-python drive.py model.h5
+python drive.py #model.h5
 ```
 Docker
 ```sh
-docker run -it --rm -p 8888:8888 -v `pwd`:/src udacity/carnd-term1-starter-kit python drive.py model.h5
+docker run -it --rm -p 4567:4567 -v `pwd`:/src udacity/carnd-term1-starter-kit python drive.py model.h5
 ```
 
 #### 3. Submission code is usable and readable
