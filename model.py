@@ -29,7 +29,7 @@ as it only contains strings for the image files and the steering angles / speed 
 
 # Use data frames for left, right as well as center images alog with angle changes
 # angle 0.2 from udacity course, tune to 0.22
-data = pd.read_csv(log_location
+data = pd.read_csv(log_location)
 left_camera = data.copy()[['left', 'steering']]
 left_camera['steering'] = left_camera['steering'] + 0.2200
 left_camera.rename(columns={'left': 'image'}, inplace=True)
@@ -40,7 +40,7 @@ right_camera.rename(columns={'right': 'image'}, inplace=True)
 
 center_camera = data.copy()[['center', 'steering']]
 center_camera.rename(columns={'center': 'image'}, inplace=True)
-combined = pd.concat([center_camera, left_camera, right_camera])
+combined_set = pd.concat([center_camera, left_camera, right_camera])
 
 # Flip
 # setting flip flags on a copy of the dataframe to augment the hataset with horizontal flips
