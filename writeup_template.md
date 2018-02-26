@@ -25,6 +25,20 @@ The goals / steps of this project are the following:
 [image5]: ./examples/placeholder_small.png "Recovery Image"
 [image6]: ./examples/placeholder_small.png "Normal Image"
 [image7]: ./examples/placeholder_small.png "Flipped Image"
+[brake_dist]: ./images/brake.png "Brake"
+[throttle_dist]: ./images/throttle.png
+[steering_dist]: ./images/steering.png
+[flip_steering]: ./images/flip_steering_image.png
+[speed_dist]: ./images/speed.png
+[straight]: ./images/straight.png
+[straight_crop]: ./images/straight_crop.png
+[left]: ./images/left.png
+[left_crop]: ./images/left_crop.png
+[right]: ./images/right.png
+[right_crop]: ./images/right.png
+[brightness1]: ./images/brightness_1.png
+[brightness2]: ./images/brightness_2.png
+[brightness3]: ./images/brightness_3.png
 
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
@@ -36,6 +50,7 @@ The goals / steps of this project are the following:
 
 My project includes the following files:
 * model.py containing the script to create and train the model
+* model.ipynb contains the visualization of the data
 * drive.py for driving the car in autonomous mode
 * model.h5 containing a trained convolution neural network 
 * writeup_report.md or writeup_report.pdf summarizing the results
@@ -43,9 +58,9 @@ My project includes the following files:
 #### 2. Submission includes functional code
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
 ```sh
-python drive.py #model.h5
+python drive.py model.h5
 ```
-Docker
+Docker (CPU)
 ```sh
 docker run -it --rm -p 4567:4567 -v `pwd`:/src udacity/carnd-term1-starter-kit python drive.py model.h5
 ```
@@ -70,13 +85,11 @@ The model was trained and validated on different data sets to ensure that the mo
 
 #### 3. Model parameter tuning
 
-The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 25).
+The model used an adam optimizer, so the learning rate was not tuned manually (model.py).
 
 #### 4. Appropriate training data
 
-Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road ... 
-
-For details about how I created the training data, see the next section. 
+Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road. For details about how I created the training data, see the next section. 
 
 ### Model Architecture and Training Strategy
 
@@ -98,36 +111,112 @@ At the end of the process, the vehicle is able to drive autonomously around the 
 
 #### 2. Final Model Architecture
 
-The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes ...
+The final model architecture (model.py and model.ipynb). Here is the configuration of the architecture.
 
-Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
+____________________________________________________________________________________________________
+Layer (type)                     Output Shape          Param #     Connected to                     
+====================================================================================================
+lambda_2 (Lambda)                (None, 49, 224, 3)    0           lambda_input_1[0][0]             
+____________________________________________________________________________________________________
+convolution2d_1 (Convolution2D)  (None, 49, 224, 3)    12          lambda_2[0][0]                   
+____________________________________________________________________________________________________
+maxpooling2d_1 (MaxPooling2D)    (None, 24, 112, 3)    0           convolution2d_1[0][0]            
+____________________________________________________________________________________________________
+dropout_1 (Dropout)              (None, 24, 112, 3)    0           maxpooling2d_1[0][0]             
+____________________________________________________________________________________________________
+convolution2d_2 (Convolution2D)  (None, 24, 112, 32)   2432        dropout_1[0][0]                  
+____________________________________________________________________________________________________
+maxpooling2d_2 (MaxPooling2D)    (None, 12, 56, 32)    0           convolution2d_2[0][0]            
+____________________________________________________________________________________________________
+dropout_2 (Dropout)              (None, 12, 56, 32)    0           maxpooling2d_2[0][0]             
+____________________________________________________________________________________________________
+convolution2d_3 (Convolution2D)  (None, 12, 56, 64)    51264       dropout_2[0][0]                  
+____________________________________________________________________________________________________
+maxpooling2d_3 (MaxPooling2D)    (None, 6, 28, 64)     0           convolution2d_3[0][0]            
+____________________________________________________________________________________________________
+dropout_3 (Dropout)              (None, 6, 28, 64)     0           maxpooling2d_3[0][0]             
+____________________________________________________________________________________________________
+convolution2d_4 (Convolution2D)  (None, 6, 28, 64)     36928       dropout_3[0][0]                  
+____________________________________________________________________________________________________
+maxpooling2d_4 (MaxPooling2D)    (None, 3, 14, 64)     0           convolution2d_4[0][0]            
+____________________________________________________________________________________________________
+flatten_1 (Flatten)              (None, 2688)          0           maxpooling2d_4[0][0]             
+____________________________________________________________________________________________________
+dropout_4 (Dropout)              (None, 2688)          0           flatten_1[0][0]                  
+____________________________________________________________________________________________________
+dense_1 (Dense)                  (None, 512)           1376768     dropout_4[0][0]                  
+____________________________________________________________________________________________________
+dropout_5 (Dropout)              (None, 512)           0           dense_1[0][0]                    
+____________________________________________________________________________________________________
+dense_2 (Dense)                  (None, 10)            5130        dropout_5[0][0]                  
+____________________________________________________________________________________________________
+dropout_6 (Dropout)              (None, 10)            0           dense_2[0][0]                    
+____________________________________________________________________________________________________
+dense_3 (Dense)                  (None, 1)             11          dropout_6[0][0]                  
+====================================================================================================
+Total params: 1,472,545
+Trainable params: 1,472,545
+Non-trainable params: 0
 
-![alt text][image1]
+
+
 
 #### 3. Creation of the Training Set & Training Process
 
 To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
 
-![alt text][image2]
+##### "Brake" Distribution 
+![alt text][brake_dist]
 
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
+##### "Throttle" Distribution 
+![alt text][throttle_dist]
 
-![alt text][image3]
-![alt text][image4]
-![alt text][image5]
+##### "Steering" Distribution 
+![alt text][steering_dist]
 
-Then I repeated this process on track two in order to get more data points.
-
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
-
-![alt text][image6]
-![alt text][image7]
-
-Etc ....
-
-After the collection process, I had X number of data points. I then preprocessed this data by ...
+##### "Speed" Distribution 
+![alt text][speed_dist]
 
 
-I finally randomly shuffled the data set and put Y% of the data into a validation set. 
+##### "Striaght Running" Snapshot
+![alt text][straight]
 
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+##### Cropped "Striaght Running" Snapshot
+![alt text][straight_crop]
+![alt text][brightness]
+##### "Left Turn" Snapshot
+![alt text][left]
+
+##### Cropped "Left Turn" Snapshot
+![alt text][left_crop]
+
+##### "Right Turn" Snapshot
+![alt text][right]
+
+##### Cropped "Right Turn" Snapshot
+![alt text][right_crop]
+
+To augment the data set, I also flipped images and angles thinking that this would help with the left turn bias involves flipping images and take the opposite sign of the steering measurement.
+
+![alt text][steering_dist]
+
+After flipping, the distribution looks more balanced. 
+
+![alt text][flip_steering]
+
+##### Brightness Augmentation
+![alt text][brightness1]
+![alt text][brightness2]
+![alt text][brightness3]
+
+
+
+
+After the collection process, I had 96432 number of data points. I then preprocessed this data by 
+
+
+I finally randomly shuffled the data set and put 10% of the data into a validation set. 
+
+I used this training data for training the model. The validation set helped determine if the model was over or under fitting. 
+
+The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
