@@ -39,6 +39,8 @@ The goals / steps of this project are the following:
 [brightness1]: ./images/brightness_1.png
 [brightness2]: ./images/brightness_2.png
 [brightness3]: ./images/brightness_3.png
+[vgg_loss]: ./images/vgg_loss.png
+[nvidia_loss]: ./images/nvidia_loss.png
 
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
@@ -160,6 +162,66 @@ Non-trainable params: 0
 
 
 
+Layer (type)                     Output Shape          Param #     Connected to                     
+====================================================================================================
+lambda_7 (Lambda)                (None, 49, 224, 3)    0           lambda_input_6[0][0]             
+____________________________________________________________________________________________________
+convolution2d_13 (Convolution2D) (None, 49, 224, 24)   1824        lambda_7[0][0]                   
+____________________________________________________________________________________________________
+maxpooling2d_13 (MaxPooling2D)   (None, 24, 112, 24)   0           convolution2d_13[0][0]           
+____________________________________________________________________________________________________
+dropout_29 (Dropout)             (None, 24, 112, 24)   0           maxpooling2d_13[0][0]            
+____________________________________________________________________________________________________
+convolution2d_14 (Convolution2D) (None, 24, 112, 36)   21636       dropout_29[0][0]                 
+____________________________________________________________________________________________________
+maxpooling2d_14 (MaxPooling2D)   (None, 12, 56, 36)    0           convolution2d_14[0][0]           
+____________________________________________________________________________________________________
+dropout_30 (Dropout)             (None, 12, 56, 36)    0           maxpooling2d_14[0][0]            
+____________________________________________________________________________________________________
+convolution2d_15 (Convolution2D) (None, 12, 56, 64)    57664       dropout_30[0][0]                 
+____________________________________________________________________________________________________
+maxpooling2d_15 (MaxPooling2D)   (None, 6, 28, 64)     0           convolution2d_15[0][0]           
+____________________________________________________________________________________________________
+dropout_31 (Dropout)             (None, 6, 28, 64)     0           maxpooling2d_15[0][0]            
+____________________________________________________________________________________________________
+convolution2d_16 (Convolution2D) (None, 6, 28, 64)     36928       dropout_31[0][0]                 
+____________________________________________________________________________________________________
+maxpooling2d_16 (MaxPooling2D)   (None, 3, 14, 64)     0           convolution2d_16[0][0]           
+____________________________________________________________________________________________________
+flatten_6 (Flatten)              (None, 2688)          0           maxpooling2d_16[0][0]            
+____________________________________________________________________________________________________
+dropout_32 (Dropout)             (None, 2688)          0           flatten_6[0][0]                  
+____________________________________________________________________________________________________
+dense_20 (Dense)                 (None, 1164)          3129996     dropout_32[0][0]                 
+____________________________________________________________________________________________________
+dropout_33 (Dropout)             (None, 1164)          0           dense_20[0][0]                   
+____________________________________________________________________________________________________
+dense_21 (Dense)                 (None, 512)           596480      dropout_33[0][0]                 
+____________________________________________________________________________________________________
+dropout_34 (Dropout)             (None, 512)           0           dense_21[0][0]                   
+____________________________________________________________________________________________________
+dense_22 (Dense)                 (None, 50)            25650       dropout_34[0][0]                 
+____________________________________________________________________________________________________
+dropout_35 (Dropout)             (None, 50)            0           dense_22[0][0]                   
+____________________________________________________________________________________________________
+dense_23 (Dense)                 (None, 10)            510         dropout_35[0][0]                 
+____________________________________________________________________________________________________
+dropout_36 (Dropout)             (None, 10)            0           dense_23[0][0]                   
+____________________________________________________________________________________________________
+dense_24 (Dense)                 (None, 1)             11          dropout_36[0][0]                 
+====================================================================================================
+Total params: 3,870,699
+Trainable params: 3,870,699
+Non-trainable params: 0
+____________________________________________________________________________________________________
+2. VGG16 feature transfer
+In [38]:
+
+vgg_features = VGG16(include_top=False, input_shape=input_shape, weights='imagenet')
+vgg_model = Sequential()
+vgg_model.add(Lambda(lambda x: (x/127.5 - 1.0),input_shape=input_shape))
+
+
 
 #### 3. Creation of the Training Set & Training Process
 
@@ -210,13 +272,22 @@ After flipping, the distribution looks more balanced.
 ![alt text][brightness3]
 
 
-
-
-After the collection process, I had 96432 number of data points. I then preprocessed this data by 
-
+After the collection process, I had 96432 number of data points. I then preprocessed this data by fig_generate in Kera to save the GPU memory consumption.
 
 I finally randomly shuffled the data set and put 10% of the data into a validation set. 
 
 I used this training data for training the model. The validation set helped determine if the model was over or under fitting. 
 
-The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+The ideal number of epochs was 20 from the figure below. I used an adam optimizer so that manually training the learning rate wasn't necessary.
+
+Training Loss figure of the proposed model  in this work.
+![alt text][nvidia_loss]
+
+
+I also compare the propsed model to the pre-trained VGG model
+
+![alt text][vgg_loss]
+
+
+
+
