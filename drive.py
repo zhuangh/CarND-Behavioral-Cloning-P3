@@ -16,6 +16,8 @@ from keras.models import load_model
 import h5py
 from keras import __version__ as keras_version
 
+import copy
+
 sio = socketio.Server()
 app = Flask(__name__)
 model = None
@@ -44,7 +46,7 @@ class SimplePIController:
 
 
 controller = SimplePIController(0.1, 0.002)
-set_speed = 28
+set_speed = 25
 controller.set_desired(set_speed)
 
 
@@ -60,7 +62,8 @@ def telemetry(sid, data):
         # The current image from the center camera of the car
         imgString = data["image"]
         image = Image.open(BytesIO(base64.b64decode(imgString)))
-        image_array = np.asarray(image)
+        #image_copy = copy.deepcopy(image) # add
+        image_array = np.asarray(image) # modify
         
         ### Change image to fit the trained model
         def crop_image(image, top=60, bottom=135):
