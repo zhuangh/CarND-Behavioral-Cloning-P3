@@ -210,5 +210,5 @@ I also compare the propsed model to the pre-trained VGG model
 
 ### Autonomous Driving Recording
 [Autonomous Driving Recording](https://youtu.be/6ZO3cvuF3EY)
-
+[Autonomous Driving Recording](https://youtu.be/87ycEDbTr1M)
 
