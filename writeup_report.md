@@ -148,9 +148,15 @@ After flipping, the distribution looks more balanced.
 
 ![alt text][brightness3]
 
-After the collection process, I had 96432 number of data points. I then preprocessed this data by Keras' fig_generate in Kera to save the GPU memory consumption.
+After the collection process, I had 96432 number of data points. I then preprocessed this data by Keras function fit_generator in Kera to save the GPU memory consumption.
 
-I finally randomly shuffled the data set and put 20% of the data into a validation set.  I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was 20 from the figure below. I used an adam optimizer. Training Loss figure of the proposed model  in this work.
+I finally randomly shuffled the data set and put 20% of the data into a validation set.  I used this training data for training the model. 
+
+The validation set helped determine if the model was over or under fitting. 
+
+The ideal number of epochs was around 23 from the figure below. I used an adam optimizer. 
+
+Training Loss figure of the proposed model  in this work.
 
 ![alt text][nvidia_loss]
 
