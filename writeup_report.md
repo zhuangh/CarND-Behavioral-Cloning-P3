@@ -34,6 +34,7 @@ by Hao Zhuang, 2018
 [brightness2]: ./images/brightness_2.png
 [brightness3]: ./images/brightness_3.png
 [vgg_loss]: ./images/vgg_loss.png
+[vgg_loss_2]: ./images/vgg_loss_2.png
 [nvidia_loss]: ./images/nvidia_loss.png
 
 ##### Rubric Points
@@ -42,7 +43,7 @@ Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/4
 
 ##### My project includes the following files:
 * model.ipynb contains the visualization of the data and the script to create and train the model (model.py is the same thing). (GPU is used for training of the neural networks in this project.)
-* drive.py for driving the car in autonomous mode
+* drive.py for driving the car in the autonomous mode
 * model.h5 containing a trained convolution neural network 
 * writeup_report.md summarizing the results
 
@@ -80,7 +81,7 @@ The final model architecture (model.py and model.ipynb). Here is the configurati
 |maxpooling2d_3 (MaxPooling2D)  |  (None, 6, 28, 64)  |   0        |   convolution2d_3[0][0]  |          
 |dropout_3 (Dropout)           |   (None, 6, 28, 64)  |   0          | maxpooling2d_3[0][0]   |          
 |convolution2d_4 (Convolution2D) | (None, 6, 28, 64)  |   36928    |   dropout_3[0][0]   |              
-|maxpooling2d_4 (MaxPooling2D)  |  (None, 3, 14, 64)  |   0           convolution2d_4[0][0]   |         
+|maxpooling2d_4 (MaxPooling2D)  |  (None, 3, 14, 64)  |   0      |     convolution2d_4[0][0]   |         
 |flatten_1 (Flatten)           |   (None, 2688)    |      0        |   maxpooling2d_4[0][0]   |          
 |dropout_4 (Dropout)          |    (None, 2688)   |       0        |   flatten_1[0][0]      |            
 |dense_1 (Dense)            |      (None, 1164)   |       3129996 |    dropout_4[0][0]    |              
@@ -114,7 +115,7 @@ To capture good driving behavior, I first recorded two laps on track one using c
 ![alt text][speed_dist]
 
 
-##### "Striaght Running" Snapshot
+##### "Straght Running" Snapshot
 ![alt text][straight]
 
 ##### Cropped "Striaght Running" Snapshot
@@ -153,9 +154,9 @@ I finally randomly shuffled the data set and put 10% of the data into a validati
 
 ![alt text][nvidia_loss]
 
-I also compare the propsed model to the pre-trained VGG model
+I also compare the proposed model to the pre-trained VGG model
 
-![alt text][vgg_loss]
+![alt text][vgg_loss_2]
 
 ### Autonomous Driving Recording
 
@@ -173,7 +174,7 @@ The model contains dropout layers in order to reduce overfitting.
 
 The model was trained and validated on different data sets to ensure that the model was not overfitting. The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
-The model used an adam optimizer, so the learning rate was not tuned manually.
+The model used an Adam optimizer, so the learning rate was not tuned manually.
 
 Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road. For details about how I created the training data, see the next section. 
 

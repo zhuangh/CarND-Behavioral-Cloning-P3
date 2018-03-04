@@ -242,25 +242,6 @@ plot_images(right_turn, augmentBrightness)
 
 
 
-# In[21]:
-
-
-"""
-def trans_image(image, steer, trans_range):
-    # Translation
-    tr_x = trans_range*np.random.uniform()-trans_range/2
-    steer_ang = steer + tr_x/trans_range*2*.2
-    tr_y = 40*np.random.uniform()-40/2
-    #tr_y = 0
-    Trans_M = np.float32([[1,0,tr_x],[0,1,tr_y]])
-    image_tr = cv2.warpAffine(image,Trans_M,(cols,rows))
-    
-    return image_tr,steer_ang
-
-plot(stright_run, trans_imag)
-"""
-
-
 # In[22]:
 
 
@@ -429,7 +410,7 @@ model_nvidia.fit_generator(batches, batches.n, nb_epoch=nvidia_epochs,
                           verbose=1, callbacks=[nvidia_model_history])
 
 
-# In[ ]:
+# In[66]:
 
 
 vgg_batches = train_datagen.flow(X_train, y_train, batch_size=batch_size )
@@ -442,47 +423,9 @@ vgg_model.fit_generator(vgg_batches, vgg_batches.n, nb_epoch=vgg_epochs,
                         callbacks=[vgg_model_history])
 
 
-# In[33]:
-
-
-ordered_track = []
-for img_src in tqdm(sim_data['center']):
-    ordered_track.append(load_image(data_dir+img_src.strip(), x_size, y_size))
-
-
-# In[34]:
-
-
-ordered_track  = np.asarray(ordered_track)
-
-
-# In[35]:
-
-
-nvidia_model_predictions = model_nvidia.predict(ordered_track, batch_size=batch_size)
-
-
-# In[36]:
-
-
-plt.plot(nvidia_model_predictions)
-
-
-# In[37]:
-
-
-vgg_model_predictions = vgg_model.predict(ordered_track, batch_size=batch_size)
-
-
-# In[38]:
-
-
-plt.plot(vgg_model_predictions)
-
-
 # Saving the models to the "models" directory
 
-# In[39]:
+# In[73]:
 
 
 get_ipython().run_line_magic('mkdir', '"models"')
@@ -490,7 +433,7 @@ get_ipython().run_line_magic('mkdir', '"models/nvidia"')
 get_ipython().run_line_magic('mkdir', '"models/vgg"')
 
 
-# In[61]:
+# In[74]:
 
 
 nvidia_dir = "models/nvidia/"
@@ -504,7 +447,7 @@ model_nvidia.save_weights(nvidia_dir+"nvidia_model_weights.h5")
 
 
 
-# In[62]:
+# In[84]:
 
 
 vgg_dir = "models/vgg/"
@@ -516,7 +459,7 @@ vgg_model.save(vgg_dir+"vgg_model.h5")
 vgg_model.save_weights(vgg_dir+"vgg_model_weights.h5")
 
 
-# In[50]:
+# In[76]:
 
 
 #from keras.callbacks import History 
@@ -537,7 +480,7 @@ plt.grid(True)
 plt.show()
 
 
-# In[60]:
+# In[77]:
 
 
 ### print the keys contained in the history object
