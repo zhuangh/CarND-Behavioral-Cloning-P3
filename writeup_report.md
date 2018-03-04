@@ -182,7 +182,7 @@ The model was trained and validated on different data sets to ensure that the mo
 
 The model used an Adam optimizer, so the learning rate was not tuned manually.
 
-Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road. For details about how I created the training data, see the next section. 
+Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road. For details about how I created the training data. 
 
 The possible enhancement is listed as follows. 
 
